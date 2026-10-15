@@ -28,6 +28,10 @@ Dapat digunakan dengan 3 cara:
 
 ### Fitur & Modul Canvas
 
+<details>
+<summary><b>Klik untuk Membuka Tabel Daftar Fitur & Modul Canvas (8 Modul)</b></summary>
+<br>
+
 | Modul | Fungsi API | Deskripsi & Fitur Utama | Format Output | Hasil Render |
 | :--- | :--- | :--- | :--- | :---: |
 | **Fake Chat Quote iOS** | `renderIQC(options)` | Quote chat WhatsApp iOS presisi, dynamic bubble height, auto word-wrap, dan timestamp collision-free. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqc.jpg) |
@@ -38,6 +42,8 @@ Dapat digunakan dengan 3 cara:
 | **Stok Akun 16:9** | `renderBikinStokAkun(options)` | Showcase akun game/sosmed 16:9, judul store 3D extrusion, kontak WA/IG, dan pill harga terformat otomatis. | JPEG (896x1200) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikinstokakun.jpg) |
 | **Testimoni Transaksi** | `renderBikinTesti(options)` | Mockup 2 layar smartphone (Dark Tech & Clean Dual Phone) untuk memajang bukti transfer dan chat pelanggan. | PNG (1080x1350) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikintesti.jpg) |
 | **Setup Gaming 3D** | `renderSetupGaming(options)` | Proyeksi gambar monitor gaming 3D trapezoid dengan koreksi perspektif non-linear dan efek pencahayaan ambient. | JPEG (1080x1920) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-setupgaming.jpg) |
+
+</details>
 
 <details>
 <summary><b>Klik untuk Membuka Galeri Visual Semua Hasil Render</b></summary>
