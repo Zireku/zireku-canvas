@@ -1,0 +1,44 @@
+{
+  "name": "zireku-canvas",
+  "version": "1.0.0",
+  "description": "High-performance, ultra-realistic WhatsApp iOS canvas & aesthetic social media graphic generator engine.",
+  "main": "src/index.js",
+  "type": "module",
+  "bin": {
+    "zireku-canvas": "src/server.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "setup-emoji": "node scripts/download-emoji.js",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zireku/zireku-canvas.git"
+  },
+  "keywords": [
+    "canvas",
+    "whatsapp",
+    "ios",
+    "iqc",
+    "fakechat",
+    "quote",
+    "qris",
+    "graphics",
+    "napi-rs-canvas",
+    "image-generator"
+  ],
+  "author": "Zireku <contact@zireku.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Zireku/zireku-canvas/issues"
+  },
+  "homepage": "https://github.com/Zireku/zireku-canvas#readme",
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65",
+    "sharp": "^0.34.0"
+  },
+  "engines": {
+    "node": ">= 18.x"
+  }
+}

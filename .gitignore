@@ -1,0 +1,16 @@
+# Besar font iOS emoji > 100MB disimpan di GitHub Release v1.0.0
+media/font/AppleColorEmoji.ttf
+
+# Node dependencies
+node_modules/
+package-lock.json
+
+# Test outputs
+test_output/
+*.png.test
+*.jpg.test
+
+# Environment & logs
+.env
+*.log
+.DS_Store
