@@ -6,6 +6,7 @@ import { renderBikinQRIS } from './bikinqris.js'
 import { renderBikinStokAkun } from './bikinstokakun.js'
 import { renderBikinTesti } from './bikintesti.js'
 import { renderSetupGaming } from './setupgaming.js'
+import { renderFakeTTVT } from './fakettvt.js'
 
 registerFonts()
 
@@ -17,6 +18,7 @@ export {
   renderBikinStokAkun,
   renderBikinTesti,
   renderSetupGaming,
+  renderFakeTTVT,
   registerFonts,
   queueRender,
   normalizeAvatar,
@@ -32,6 +34,7 @@ export default {
   renderBikinStokAkun,
   renderBikinTesti,
   renderSetupGaming,
+  renderFakeTTVT,
   registerFonts,
   queueRender,
   normalizeAvatar,

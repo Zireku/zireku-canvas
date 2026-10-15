@@ -95,6 +95,12 @@ const server = http.createServer(async (req, res) => {
       return res.end(buffer)
     }
 
+    if (url.pathname === '/api/fakettvt') {
+      const buffer = await zirekuCanvas.renderFakeTTVT(body)
+      res.writeHead(200, { 'Content-Type': 'image/png' })
+      return res.end(buffer)
+    }
+
     res.writeHead(404, { 'Content-Type': 'application/json' })
     return res.end(JSON.stringify({ error: 'Endpoint tidak ditemukan.' }))
 

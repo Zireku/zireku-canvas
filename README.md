@@ -33,6 +33,7 @@ Dapat digunakan dengan 3 cara:
 | **Fake Chat Quote iOS** | `renderIQC(options)` | Quote chat WhatsApp iOS presisi, dynamic bubble height, auto word-wrap, dan timestamp collision-free. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqc.jpg) |
 | **Fake Channel iOS** | `renderFakeCH(options)` | Tampilan info WhatsApp Channel lengkap dengan foto profil bulat, jumlah pengikut terformat, dan kartu deskripsi adaptif. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-fakech.jpg) |
 | **Fake Group iOS** | `renderFakeGC(options)` | Tampilan info WhatsApp Group dengan dukungan judul multiline, deskripsi dinamis, dan downward push. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-fakegc.jpg) |
+| **Fake TikTok Video** | `renderFakeTTVT(options)` | Mockup UI TikTok realistis: avatar plus button, icon sidebar, like/comment/share counter, dan audio credit. | PNG (720x1600) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-fakettvt.jpg) |
 | **QRIS Generator** | `renderBikinQRIS(options)` | Generator kartu pembayaran QRIS estetik dengan 4 pilihan template (Dark Modern, Anime Monokrom, Pink Notepad, March 7th). | PNG (1080x1350 / 736x736) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikinqris.jpg) |
 | **Stok Akun 16:9** | `renderBikinStokAkun(options)` | Showcase akun game/sosmed 16:9, judul store 3D extrusion, kontak WA/IG, dan pill harga terformat otomatis. | JPEG (896x1200) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikinstokakun.jpg) |
 | **Testimoni Transaksi** | `renderBikinTesti(options)` | Mockup 2 layar smartphone (Dark Tech & Clean Dual Phone) untuk memajang bukti transfer dan chat pelanggan. | PNG (1080x1350) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikintesti.jpg) |
@@ -57,6 +58,11 @@ Dapat digunakan dengan 3 cara:
 </p>
 
 <br>
+
+#### Fake TikTok Video Mockup
+<img src="docs/previews/preview-fakettvt.jpg" alt="Preview Fake TikTok Video" width="420" />
+
+<br><br>
 
 #### QRIS Generator & Stok Akun 16:9
 <p align="center">
@@ -104,7 +110,13 @@ Script otomatis ini akan mengunduh font langsung dari aset GitHub Releases resmi
 
 ### Contoh Penggunaan (API Caller)
 
-#### 1. Fake WhatsApp iOS Quote (renderIQC)
+> [!TIP]
+> Klik judul modul di bawah ini untuk membuka dan melihat contoh kode implementasi.
+
+<details>
+<summary><b>1. Fake WhatsApp iOS Quote (<code>renderIQC</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderIQC } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -118,7 +130,12 @@ const buffer = await renderIQC({
 fs.writeFileSync('output-iqc.png', buffer)
 ```
 
-#### 2. Fake Channel Info iOS (renderFakeCH)
+</details>
+
+<details>
+<summary><b>2. Fake Channel Info iOS (<code>renderFakeCH</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderFakeCH } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -133,7 +150,12 @@ const buffer = await renderFakeCH({
 fs.writeFileSync('output-channel.png', buffer)
 ```
 
-#### 3. Fake Group Info iOS (renderFakeGC)
+</details>
+
+<details>
+<summary><b>3. Fake Group Info iOS (<code>renderFakeGC</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderFakeGC } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -148,7 +170,35 @@ const buffer = await renderFakeGC({
 fs.writeFileSync('output-group.png', buffer)
 ```
 
-#### 4. Generator QRIS Custom (renderBikinQRIS)
+</details>
+
+<details>
+<summary><b>4. Fake TikTok Video Mockup (<code>renderFakeTTVT</code>)</b></summary>
+<br>
+
+```javascript
+import { renderFakeTTVT } from 'zireku-canvas'
+import fs from 'node:fs'
+
+const buffer = await renderFakeTTVT({
+  video: './video-thumbnail.jpg',
+  avatar: './profile-pic.jpg',
+  name: 'Zireku',
+  caption: 'Review bot WhatsApp tercanggih #fyp #coding',
+  likes: '176K',
+  comments: '3.876',
+  shares: '1.987'
+})
+
+fs.writeFileSync('output-fakettvt.png', buffer)
+```
+
+</details>
+
+<details>
+<summary><b>5. Generator QRIS Custom (<code>renderBikinQRIS</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderBikinQRIS } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -163,7 +213,12 @@ const buffer = await renderBikinQRIS({
 fs.writeFileSync('output-qris.png', buffer)
 ```
 
-#### 5. Showcase Stok Akun (renderBikinStokAkun)
+</details>
+
+<details>
+<summary><b>6. Showcase Stok Akun (<code>renderBikinStokAkun</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderBikinStokAkun } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -179,7 +234,12 @@ const buffer = await renderBikinStokAkun({
 fs.writeFileSync('output-stok.jpg', buffer)
 ```
 
-#### 6. Mockup Testimoni (renderBikinTesti)
+</details>
+
+<details>
+<summary><b>7. Mockup Testimoni (<code>renderBikinTesti</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderBikinTesti } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -195,7 +255,12 @@ const buffer = await renderBikinTesti({
 fs.writeFileSync('output-testi.png', buffer)
 ```
 
-#### 7. Showcase Setup Gaming 3D (renderSetupGaming)
+</details>
+
+<details>
+<summary><b>8. Showcase Setup Gaming 3D (<code>renderSetupGaming</code>)</b></summary>
+<br>
+
 ```javascript
 import { renderSetupGaming } from 'zireku-canvas'
 import fs from 'node:fs'
@@ -206,6 +271,8 @@ const buffer = await renderSetupGaming({
 
 fs.writeFileSync('output-gaming.jpg', buffer)
 ```
+
+</details>
 
 ### Menjalankan Sebagai Standalone REST API
 

@@ -14,9 +14,9 @@ async function runTests() {
       message: 'Ini contoh pesan *bold*, _italic_, ~strike~ dari engine canvas!',
       time: '12.45'
     })
-    console.log(`[PASS] [1/7] renderIQC sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [1/8] renderIQC sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [1/7] renderIQC error:', err)
+    console.error('[FAIL] [1/8] renderIQC error:', err)
   }
 
   try {
@@ -26,9 +26,9 @@ async function runTests() {
       followers: '25.000',
       description: 'Official announcements and updates for *Zireku* canvas engine.'
     })
-    console.log(`[PASS] [2/7] renderFakeCH sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [2/8] renderFakeCH sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [2/7] renderFakeCH error:', err)
+    console.error('[FAIL] [2/8] renderFakeCH error:', err)
   }
 
   try {
@@ -38,9 +38,9 @@ async function runTests() {
       memberCount: '150',
       description: 'Grup diskusi developer dan bot architecture.'
     })
-    console.log(`[PASS] [3/7] renderFakeGC sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [3/8] renderFakeGC sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [3/7] renderFakeGC error:', err)
+    console.error('[FAIL] [3/8] renderFakeGC error:', err)
   }
 
   try {
@@ -50,9 +50,9 @@ async function runTests() {
       name: '@zireku_store',
       template: 1
     })
-    console.log(`[PASS] [4/7] renderBikinQRIS sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [4/8] renderBikinQRIS sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [4/7] renderBikinQRIS error:', err)
+    console.error('[FAIL] [4/8] renderBikinQRIS error:', err)
   }
 
   try {
@@ -63,9 +63,9 @@ async function runTests() {
       number: '08123456789',
       sosmed: 'zireku.id'
     })
-    console.log(`[PASS] [5/7] renderBikinStokAkun sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [5/8] renderBikinStokAkun sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [5/7] renderBikinStokAkun error:', err)
+    console.error('[FAIL] [5/8] renderBikinStokAkun error:', err)
   }
 
   try {
@@ -76,18 +76,33 @@ async function runTests() {
       name: '@zireku',
       template: 1
     })
-    console.log(`[PASS] [6/7] renderBikinTesti sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [6/8] renderBikinTesti sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [6/7] renderBikinTesti error:', err)
+    console.error('[FAIL] [6/8] renderBikinTesti error:', err)
   }
 
   try {
     const buf = await zirekuCanvas.renderSetupGaming({
       screenImage: sampleAvatar
     })
-    console.log(`[PASS] [7/7] renderSetupGaming sukses: ${buf.length} bytes`)
+    console.log(`[PASS] [7/8] renderSetupGaming sukses: ${buf.length} bytes`)
   } catch (err) {
-    console.error('[FAIL] [7/7] renderSetupGaming error:', err)
+    console.error('[FAIL] [7/8] renderSetupGaming error:', err)
+  }
+
+  try {
+    const buf = await zirekuCanvas.renderFakeTTVT({
+      video: sampleAvatar,
+      avatar: sampleAvatar,
+      name: 'Zireku',
+      caption: 'Review bot WhatsApp canggih #fyp #botwhatsapp',
+      likes: '176K',
+      comments: '3.876',
+      shares: '1.987'
+    })
+    console.log(`[PASS] [8/8] renderFakeTTVT sukses: ${buf.length} bytes`)
+  } catch (err) {
+    console.error('[FAIL] [8/8] renderFakeTTVT error:', err)
   }
 
   console.log('\n[INFO] Semua pengujian modul selesai dijalankan.')
