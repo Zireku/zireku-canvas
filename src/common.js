@@ -26,6 +26,8 @@ export function registerFonts() {
     { file: 'SF-Pro.ttf', name: 'SF Pro' },
     { file: 'AppleColorEmoji.ttf', name: 'Apple Color Emoji' },
     { file: 'NotoColorEmoji.ttf', name: 'Noto Color Emoji' },
+    { file: 'NotoColorEmoji.ttf', name: 'NotoColorEmoji' },
+    { file: 'NotoColorEmoji.ttf', name: 'Android Emoji' },
     { file: 'Poppins-Bold.ttf', name: 'Poppins Bold' },
     { file: 'Poppins-Bold.ttf', name: 'Plus Jakarta Sans' },
     { file: 'Poppins-Medium.ttf', name: 'Poppins Medium' },
@@ -54,6 +56,8 @@ export function registerFonts() {
   if (fs.existsSync(systemNoto)) {
     try {
       GlobalFonts.registerFromPath(systemNoto, 'Noto Color Emoji')
+      GlobalFonts.registerFromPath(systemNoto, 'NotoColorEmoji')
+      GlobalFonts.registerFromPath(systemNoto, 'Android Emoji')
     } catch (e) {}
   }
 }

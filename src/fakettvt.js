@@ -52,22 +52,25 @@ function formatCount(val) {
 }
 
 function wrapText(ctx, text, maxWidth) {
-  const words = text.split(/\s+/)
+  const paragraphs = String(text || '').split('\n')
   const lines = []
-  let currentLine = ''
-
-  for (const word of words) {
-    const testLine = currentLine ? currentLine + ' ' + word : word
-    const width = ctx.measureText(testLine).width
-    if (width <= maxWidth) {
-      currentLine = testLine
-    } else {
-      if (currentLine) lines.push(currentLine)
-      currentLine = word
+  for (const para of paragraphs) {
+    const words = para.split(/\s+/).filter(Boolean)
+    if (words.length === 0) continue
+    let currentLine = ''
+    for (const word of words) {
+      const testLine = currentLine ? currentLine + ' ' + word : word
+      const width = ctx.measureText(testLine).width
+      if (width <= maxWidth) {
+        currentLine = testLine
+      } else {
+        if (currentLine) lines.push(currentLine)
+        currentLine = word
+      }
     }
+    if (currentLine) lines.push(currentLine)
   }
-  if (currentLine) lines.push(currentLine)
-  return lines
+  return lines.length > 0 ? lines : [text || '']
 }
 
 function drawPlus(ctx, x, y, r = 15) {
@@ -278,7 +281,7 @@ export async function renderFakeTTVT(options = {}) {
     const maxTextW = 540
 
     ctx.save()
-    ctx.font = '22px "SF Pro Text Regular", "Noto Color Emoji", "SF Pro", sans-serif'
+    ctx.font = '22px "SF Pro Text Regular", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", "SF Pro", "Apple Color Emoji", sans-serif'
     const captionLines = wrapText(ctx, caption, maxTextW)
 
     const audioH = 28
@@ -288,7 +291,7 @@ export async function renderFakeTTVT(options = {}) {
 
     ctx.fillStyle = '#FFFFFF'
     ctx.textAlign = 'left'
-    ctx.font = 'bold 26px "SF Pro Display Bold", "SF Pro", sans-serif'
+    ctx.font = 'bold 26px "SF Pro Display Bold", "SF Pro", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif'
     ctx.shadowColor = 'rgba(0,0,0,0.85)'
     ctx.shadowBlur = 5
     ctx.shadowOffsetY = 1
@@ -296,7 +299,7 @@ export async function renderFakeTTVT(options = {}) {
 
     curY += 32
 
-    ctx.font = '22px "SF Pro Text Regular", "Noto Color Emoji", "SF Pro", sans-serif'
+    ctx.font = '22px "SF Pro Text Regular", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", "SF Pro", "Apple Color Emoji", sans-serif'
     for (const line of captionLines) {
       ctx.fillText(line, leftX, curY)
       curY += 30
@@ -304,7 +307,7 @@ export async function renderFakeTTVT(options = {}) {
 
     curY += 6
 
-    ctx.font = '19px "SF Pro Text Regular", "Noto Color Emoji", "SF Pro", sans-serif'
+    ctx.font = '19px "SF Pro Text Regular", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", "SF Pro", "Apple Color Emoji", sans-serif'
     ctx.fillText('suara asli - ' + name, leftX, curY)
 
     ctx.restore()
