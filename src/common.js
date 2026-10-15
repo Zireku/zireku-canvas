@@ -72,6 +72,11 @@ export async function normalizeAvatar(input, size = 300) {
     if (input.startsWith('http://') || input.startsWith('https://')) {
       const res = await fetch(input)
       buf = Buffer.from(await res.arrayBuffer())
+    } else if (input.startsWith('data:image/')) {
+      const b64 = input.split(',')[1] || ''
+      buf = Buffer.from(b64, 'base64')
+    } else if (/^[A-Za-z0-9+/=\s]{100,}$/.test(input.trim())) {
+      buf = Buffer.from(input.trim().replace(/\s+/g, ''), 'base64')
     } else if (fs.existsSync(input)) {
       buf = await fs.promises.readFile(input)
     }
