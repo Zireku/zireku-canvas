@@ -11,12 +11,7 @@ export function getAssetPath(...segments) {
   return path.join(ROOT_DIR, 'media', ...segments)
 }
 
-let fontsRegistered = false
-
 export function registerFonts() {
-  if (fontsRegistered) return
-  fontsRegistered = true
-
   const fontMappings = [
     { file: 'SF-Pro-Display-Bold.otf', name: 'SF Pro Display Bold' },
     { file: 'SF-Pro-Display-Semibold.otf', name: 'SF Pro Display Semibold' },
