@@ -7,6 +7,7 @@ import { renderBikinStokAkun } from './bikinstokakun.js'
 import { renderBikinTesti } from './bikintesti.js'
 import { renderSetupGaming } from './setupgaming.js'
 import { renderFakeTTVT } from './fakettvt.js'
+import { renderClubQuotes } from './clubquotes.js'
 
 registerFonts()
 
@@ -19,6 +20,7 @@ export {
   renderBikinTesti,
   renderSetupGaming,
   renderFakeTTVT,
+  renderClubQuotes,
   registerFonts,
   queueRender,
   normalizeAvatar,
@@ -35,6 +37,7 @@ export default {
   renderBikinTesti,
   renderSetupGaming,
   renderFakeTTVT,
+  renderClubQuotes,
   registerFonts,
   queueRender,
   normalizeAvatar,
