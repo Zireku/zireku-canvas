@@ -431,7 +431,7 @@ export async function renderBikinQRIS(options = {}) {
           ctx.textAlign = 'left'
           ctx.textBaseline = 'middle'
           ctx.fillStyle = '#111111'
-          fitBadgeText(ctx, name, 285, 22)
+          fitBadgeText(ctx, name, 285, 32)
           ctx.fillText(name, 988, topCenterY)
         }
 
@@ -451,7 +451,7 @@ export async function renderBikinQRIS(options = {}) {
           ctx.textAlign = 'left'
           ctx.textBaseline = 'middle'
           ctx.fillStyle = '#111111'
-          fitBadgeText(ctx, number, 285, 22)
+          fitBadgeText(ctx, number, 285, 28)
           ctx.fillText(number, 988, bottomCenterY)
         }
 
