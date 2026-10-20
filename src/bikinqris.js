@@ -1,11 +1,28 @@
-import { createCanvas, loadImage, clearAllCache } from '@napi-rs/canvas'
+import { createCanvas, loadImage, clearAllCache, GlobalFonts } from '@napi-rs/canvas'
 import fs from 'node:fs'
+import path from 'node:path'
 import sharp from 'sharp'
 import { registerFonts, queueRender, getAssetPath } from './common.js'
 
 const cachedTemplates = {}
 let cachedIconWa = null
 let cachedIconSosmed = null
+let cachedIconGroup = null
+
+const ensureFonts = () => {
+  try {
+    const fontDir = getAssetPath('font')
+    const poppins = path.join(fontDir, 'Poppins-Bold.ttf')
+    if (fs.existsSync(poppins)) {
+      GlobalFonts.registerFromPath(poppins, 'Poppins Bold')
+      GlobalFonts.registerFromPath(poppins, 'Plus Jakarta Sans')
+    }
+    const sf = path.join(fontDir, 'SF-Pro-Display-Bold.otf')
+    if (fs.existsSync(sf)) {
+      GlobalFonts.registerFromPath(sf, 'SF Pro Display Bold')
+    }
+  } catch (e) {}
+}
 
 async function getTemplateImage(choice, customPath) {
   if (customPath) {
@@ -38,6 +55,17 @@ async function getIconSosmedImage() {
   return cachedIconSosmed
 }
 
+async function getIconGroupImage() {
+  if (cachedIconGroup) return cachedIconGroup
+  const filePath = getAssetPath('canvas', 'bikinqris', 'icon_group.png')
+  if (fs.existsSync(filePath)) {
+    const buf = await fs.promises.readFile(filePath)
+    cachedIconGroup = await loadImage(buf)
+    return cachedIconGroup
+  }
+  return await getIconSosmedImage()
+}
+
 async function normalizeQris(input, size = 496) {
   let buf = input
   if (typeof input === 'string') {
@@ -55,6 +83,7 @@ async function normalizeQris(input, size = 496) {
 }
 
 function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath()
   ctx.moveTo(x + r, y)
   ctx.arcTo(x + w, y, x + w, y + h, r)
   ctx.arcTo(x + w, y + h, x, y + h, r)
@@ -85,10 +114,13 @@ function fitBadgeText(ctx, text, maxW = 165, initialSize = 13.5) {
 
 export async function renderBikinQRIS(options = {}) {
   registerFonts()
+  ensureFonts()
+
   const {
     qrisImage,
     number = '',
     name = '',
+    groupAvatar = null,
     template = 1,
     customTemplatePath
   } = options
@@ -125,7 +157,6 @@ export async function renderBikinQRIS(options = {}) {
 
         ctx.save()
         ctx.translate(540, 678)
-        ctx.beginPath()
         roundRect(ctx, -248, -247.5, 496, 495, 16)
         ctx.clip()
         ctx.drawImage(qris, 0, 0, qris.width, qris.height, -248, -247.5, 496, 495)
@@ -184,7 +215,6 @@ export async function renderBikinQRIS(options = {}) {
         ctx.drawImage(templateImg, 0, 0, 736, 736)
 
         ctx.save()
-        ctx.beginPath()
         roundRect(ctx, 412, 228, 276, 276, 8)
         ctx.clip()
         ctx.drawImage(qris, 0, 0, qris.width, qris.height, 412, 228, 276, 276)
@@ -235,7 +265,6 @@ export async function renderBikinQRIS(options = {}) {
         ctx.drawImage(templateImg, 0, 0, 736, 736)
 
         ctx.save()
-        ctx.beginPath()
         roundRect(ctx, 112, 176, 290, 290, 14)
         ctx.clip()
         ctx.drawImage(qris, 0, 0, qris.width, qris.height, 112, 176, 290, 290)
@@ -264,7 +293,6 @@ export async function renderBikinQRIS(options = {}) {
         const qrSize = 282
         const qx = -qrSize / 2
         const qy = -qrSize / 2
-        ctx.beginPath()
         roundRect(ctx, qx, qy, qrSize, qrSize, 10)
         ctx.clip()
         ctx.drawImage(qris, 0, 0, qris.width, qris.height, qx, qy, qrSize, qrSize)
@@ -337,7 +365,100 @@ export async function renderBikinQRIS(options = {}) {
         return await canvas.encode('png')
       }
 
-      throw new Error(`Pilihan template ${templateChoice} tidak valid (pilih 1, 2, 3, atau 4).`)
+      if (templateChoice === 5) {
+        const [iconWaImg, defaultGroupIconImg] = await Promise.all([
+          getIconWaImage(),
+          getIconGroupImage()
+        ])
+
+        let groupAvatarImg = null
+        if (groupAvatar) {
+          try {
+            let buf = groupAvatar
+            if (typeof groupAvatar === 'string') {
+              if (groupAvatar.startsWith('http://') || groupAvatar.startsWith('https://')) {
+                const res = await fetch(groupAvatar)
+                buf = Buffer.from(await res.arrayBuffer())
+              } else if (fs.existsSync(groupAvatar)) {
+                buf = await fs.promises.readFile(groupAvatar)
+              }
+            }
+            const avatarPng = await sharp(buf)
+              .resize(88, 88, { fit: 'cover' })
+              .png()
+              .toBuffer()
+            groupAvatarImg = await loadImage(avatarPng)
+          } catch (e) {
+            groupAvatarImg = null
+          }
+        }
+        const finalGroupIcon = groupAvatarImg || defaultGroupIconImg
+
+        const normQrisBuffer = await normalizeQris(qrisImage, 477)
+        const qris = await loadImage(normQrisBuffer)
+
+        const canvas = createCanvas(1307, 735)
+        const ctx = canvas.getContext('2d')
+
+        ctx.drawImage(templateImg, 0, 0, 1307, 735)
+
+        const qx = 38
+        const qy = 224
+        const qw = 477
+        const qh = 477
+        const qrRadius = 24
+
+        ctx.save()
+        roundRect(ctx, qx, qy, qw, qh, qrRadius)
+        ctx.clip()
+        ctx.drawImage(qris, qx, qy, qw, qh)
+        ctx.restore()
+
+        const iconSize = 44
+        const groupIconX = 932
+        const topCenterY = 571
+        const groupIconY = Math.round(topCenterY - iconSize / 2)
+
+        if (name) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(groupIconX + iconSize / 2, groupIconY + iconSize / 2, iconSize / 2, 0, Math.PI * 2)
+          ctx.closePath()
+          ctx.clip()
+          ctx.drawImage(finalGroupIcon, groupIconX, groupIconY, iconSize, iconSize)
+          ctx.restore()
+
+          ctx.textAlign = 'left'
+          ctx.textBaseline = 'middle'
+          ctx.fillStyle = '#111111'
+          fitBadgeText(ctx, name, 285, 22)
+          ctx.fillText(name, 988, topCenterY)
+        }
+
+        const waIconX = 932
+        const bottomCenterY = 682
+        const waIconY = Math.round(bottomCenterY - iconSize / 2)
+
+        if (number) {
+          ctx.save()
+          ctx.beginPath()
+          ctx.arc(waIconX + iconSize / 2, waIconY + iconSize / 2, iconSize / 2, 0, Math.PI * 2)
+          ctx.closePath()
+          ctx.clip()
+          ctx.drawImage(iconWaImg, waIconX, waIconY, iconSize, iconSize)
+          ctx.restore()
+
+          ctx.textAlign = 'left'
+          ctx.textBaseline = 'middle'
+          ctx.fillStyle = '#111111'
+          fitBadgeText(ctx, number, 285, 22)
+          ctx.fillText(number, 988, bottomCenterY)
+        }
+
+        return await canvas.encode('png')
+      }
+
+      throw new Error(`Pilihan template ${templateChoice} tidak valid (pilih 1, 2, 3, 4, atau 5).`)
     } finally {
       clearAllCache()
     }

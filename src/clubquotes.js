@@ -1,9 +1,24 @@
-import { createCanvas, loadImage } from '@napi-rs/canvas'
+import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas'
 import { readFile } from 'node:fs/promises'
+import fs from 'node:fs'
+import path from 'node:path'
 import { registerFonts, queueRender, getAssetPath } from './common.js'
 
 let cachedT1 = null
 let cachedT2 = null
+
+function ensureFonts() {
+  try {
+    const roboto = getAssetPath('font', 'RobotoCondensed-Bold.ttf')
+    if (fs.existsSync(roboto)) {
+      GlobalFonts.registerFromPath(roboto, 'Roboto Condensed Bold')
+    }
+    const aldrich = getAssetPath('font', 'Aldrich-Regular.ttf')
+    if (fs.existsSync(aldrich)) {
+      GlobalFonts.registerFromPath(aldrich, 'Aldrich')
+    }
+  } catch (e) {}
+}
 
 async function getTemplate(templateNum) {
   if (templateNum === 2) {
@@ -49,6 +64,8 @@ function wrapText(ctx, text, maxWidth) {
 export async function renderClubQuotes(options = {}) {
   return queueRender(async () => {
     registerFonts()
+    ensureFonts()
+
     const {
       text = '',
       template = 1
@@ -72,14 +89,14 @@ export async function renderClubQuotes(options = {}) {
       if (cleanText.length > 60) fontSize = 24
       else if (cleanText.length > 40) fontSize = 28
 
-      ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.font = `bold ${fontSize}px "Aldrich", "NK57", Arial, sans-serif, "Noto Color Emoji"`
       ctx.letterSpacing = '1.5px'
 
       let lines = wrapText(ctx, cleanText, maxWidth)
 
       if (lines.length > 3 && fontSize > 24) {
         fontSize = 24
-        ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+        ctx.font = `bold ${fontSize}px "Aldrich", "NK57", Arial, sans-serif, "Noto Color Emoji"`
         lines = wrapText(ctx, cleanText, maxWidth)
       }
 
@@ -100,7 +117,7 @@ export async function renderClubQuotes(options = {}) {
       ctx.fillStyle = '#FFFFFF'
       ctx.shadowColor = 'rgba(80, 180, 255, 0.95)'
       ctx.shadowBlur = 18
-      ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.font = `bold ${fontSize}px "Aldrich", "NK57", Arial, sans-serif, "Noto Color Emoji"`
       ctx.letterSpacing = '1.5px'
 
       for (let i = 0; i < lines.length; i++) {
@@ -115,12 +132,12 @@ export async function renderClubQuotes(options = {}) {
       else if (cleanText.length > 45) fontSize = 38
       else if (cleanText.length > 25) fontSize = 44
 
-      ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "SF Pro Display Bold", Arial, sans-serif, "Noto Color Emoji"`
       let lines = wrapText(ctx, cleanText, maxWidth)
 
       if (lines.length > 3 && fontSize > 32) {
         fontSize = 32
-        ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+        ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "SF Pro Display Bold", Arial, sans-serif, "Noto Color Emoji"`
         lines = wrapText(ctx, cleanText, maxWidth)
       }
 
@@ -136,7 +153,7 @@ export async function renderClubQuotes(options = {}) {
       ctx.fillStyle = '#FFFFFF'
       ctx.shadowColor = 'rgba(160, 215, 255, 0.9)'
       ctx.shadowBlur = 16
-      ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "SF Pro Display Bold", Arial, sans-serif, "Noto Color Emoji"`
 
       for (let i = 0; i < lines.length; i++) {
         ctx.fillText(lines[i], 0, startY + i * lineHeight)
