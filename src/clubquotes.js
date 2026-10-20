@@ -65,22 +65,28 @@ export async function renderClubQuotes(options = {}) {
     let cleanText = String(text || '').trim().toUpperCase()
 
     if (tmplNum === 2) {
-      if (!cleanText.startsWith('"') && !cleanText.endsWith('"')) {
-        cleanText = `"${cleanText}"`
-      }
+      const hasQuotes = cleanText.startsWith('“') || cleanText.startsWith('"')
+      const maxWidth = 560
 
-      const maxWidth = 580
-      let fontSize = 28
-      if (cleanText.length > 50) fontSize = 22
-      else if (cleanText.length > 30) fontSize = 25
+      let fontSize = 40
+      if (cleanText.length > 65) fontSize = 24
+      else if (cleanText.length > 45) fontSize = 28
+      else if (cleanText.length > 25) fontSize = 34
 
-      ctx.font = `${fontSize}px "NK57", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.letterSpacing = '1.5px'
+
       let lines = wrapText(ctx, cleanText, maxWidth)
 
-      if (lines.length > 3 && fontSize > 20) {
-        fontSize = 20
-        ctx.font = `${fontSize}px "NK57", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      if (lines.length > 3 && fontSize > 24) {
+        fontSize = 24
+        ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
         lines = wrapText(ctx, cleanText, maxWidth)
+      }
+
+      if (!hasQuotes && lines.length > 0) {
+        lines[0] = `“ ${lines[0]}`
+        lines[lines.length - 1] = `${lines[lines.length - 1]} ”`
       }
 
       const centerY = 785
@@ -92,30 +98,33 @@ export async function renderClubQuotes(options = {}) {
       ctx.textAlign = 'center'
       ctx.fillStyle = '#FFFFFF'
       ctx.shadowColor = 'rgba(80, 180, 255, 0.95)'
-      ctx.shadowBlur = 16
+      ctx.shadowBlur = 18
+      ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      ctx.letterSpacing = '1.5px'
 
       for (let i = 0; i < lines.length; i++) {
         ctx.fillText(lines[i], 368, startY + i * lineHeight)
       }
       ctx.restore()
     } else {
-      const maxWidth = 740
-      let fontSize = 42
-      if (cleanText.length > 60) fontSize = 30
-      else if (cleanText.length > 40) fontSize = 34
-      else if (cleanText.length > 25) fontSize = 38
+      const maxWidth = 760
 
-      ctx.font = `bold ${fontSize}px "SF Pro Display Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      let fontSize = 58
+      if (cleanText.length > 65) fontSize = 32
+      else if (cleanText.length > 45) fontSize = 40
+      else if (cleanText.length > 25) fontSize = 48
+
+      ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
       let lines = wrapText(ctx, cleanText, maxWidth)
 
-      if (lines.length > 4 && fontSize > 26) {
-        fontSize = 26
-        ctx.font = `bold ${fontSize}px "SF Pro Display Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
+      if (lines.length > 4 && fontSize > 32) {
+        fontSize = 32
+        ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
         lines = wrapText(ctx, cleanText, maxWidth)
       }
 
       const centerY = 880
-      const lineHeight = Math.round(fontSize * 1.35)
+      const lineHeight = Math.round(fontSize * 1.3)
       const totalHeight = lines.length * lineHeight
       const startY = centerY - totalHeight / 2 + fontSize / 2
 
@@ -123,7 +132,8 @@ export async function renderClubQuotes(options = {}) {
       ctx.textAlign = 'center'
       ctx.fillStyle = '#FFFFFF'
       ctx.shadowColor = 'rgba(160, 215, 255, 0.85)'
-      ctx.shadowBlur = 14
+      ctx.shadowBlur = 15
+      ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
 
       for (let i = 0; i < lines.length; i++) {
         ctx.fillText(lines[i], 478, startY + i * lineHeight)

@@ -33,7 +33,9 @@ export function registerFonts() {
     { file: 'bebasneue.ttf', name: 'Bebas Neue' },
     { file: 'ihatcs.ttf', name: 'I Hate CS' },
     { file: 'nk57.otf', name: 'NK57' },
-    { file: 'truestory.ttf', name: 'True Story' }
+    { file: 'truestory.ttf', name: 'True Story' },
+    { file: 'RobotoCondensed-Bold.ttf', name: 'Roboto Condensed Bold' },
+    { file: 'Aldrich-Regular.ttf', name: 'Aldrich' }
   ]
 
   for (const item of fontMappings) {
