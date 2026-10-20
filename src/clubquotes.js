@@ -66,12 +66,11 @@ export async function renderClubQuotes(options = {}) {
 
     if (tmplNum === 2) {
       const hasQuotes = cleanText.startsWith('“') || cleanText.startsWith('"')
-      const maxWidth = 560
+      const maxWidth = 590
 
-      let fontSize = 40
-      if (cleanText.length > 65) fontSize = 24
-      else if (cleanText.length > 45) fontSize = 28
-      else if (cleanText.length > 25) fontSize = 34
+      let fontSize = 32
+      if (cleanText.length > 60) fontSize = 24
+      else if (cleanText.length > 40) fontSize = 28
 
       ctx.font = `bold ${fontSize}px "Aldrich", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
       ctx.letterSpacing = '1.5px'
@@ -89,12 +88,14 @@ export async function renderClubQuotes(options = {}) {
         lines[lines.length - 1] = `${lines[lines.length - 1]} ”`
       }
 
-      const centerY = 785
       const lineHeight = Math.round(fontSize * 1.45)
       const totalHeight = lines.length * lineHeight
-      const startY = centerY - totalHeight / 2 + fontSize / 2
+      const startY = -totalHeight / 2 + fontSize / 2
 
       ctx.save()
+      ctx.translate(372, 762)
+      ctx.rotate((-4.65 * Math.PI) / 180)
+
       ctx.textAlign = 'center'
       ctx.fillStyle = '#FFFFFF'
       ctx.shadowColor = 'rgba(80, 180, 255, 0.95)'
@@ -103,40 +104,42 @@ export async function renderClubQuotes(options = {}) {
       ctx.letterSpacing = '1.5px'
 
       for (let i = 0; i < lines.length; i++) {
-        ctx.fillText(lines[i], 368, startY + i * lineHeight)
+        ctx.fillText(lines[i], 0, startY + i * lineHeight)
       }
       ctx.restore()
     } else {
-      const maxWidth = 760
+      const maxWidth = 780
 
-      let fontSize = 58
-      if (cleanText.length > 65) fontSize = 32
-      else if (cleanText.length > 45) fontSize = 40
-      else if (cleanText.length > 25) fontSize = 48
+      let fontSize = 52
+      if (cleanText.length > 70) fontSize = 32
+      else if (cleanText.length > 45) fontSize = 38
+      else if (cleanText.length > 25) fontSize = 44
 
       ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
       let lines = wrapText(ctx, cleanText, maxWidth)
 
-      if (lines.length > 4 && fontSize > 32) {
+      if (lines.length > 3 && fontSize > 32) {
         fontSize = 32
         ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
         lines = wrapText(ctx, cleanText, maxWidth)
       }
 
-      const centerY = 880
-      const lineHeight = Math.round(fontSize * 1.3)
+      const lineHeight = Math.round(fontSize * 1.25)
       const totalHeight = lines.length * lineHeight
-      const startY = centerY - totalHeight / 2 + fontSize / 2
+      const startY = -totalHeight / 2 + fontSize / 2
 
       ctx.save()
+      ctx.translate(500, 855)
+      ctx.rotate((2.85 * Math.PI) / 180)
+
       ctx.textAlign = 'center'
       ctx.fillStyle = '#FFFFFF'
-      ctx.shadowColor = 'rgba(160, 215, 255, 0.85)'
-      ctx.shadowBlur = 15
+      ctx.shadowColor = 'rgba(160, 215, 255, 0.9)'
+      ctx.shadowBlur = 16
       ctx.font = `bold ${fontSize}px "Roboto Condensed Bold", "Noto Color Emoji", "NotoColorEmoji", "Android Emoji", sans-serif`
 
       for (let i = 0; i < lines.length; i++) {
-        ctx.fillText(lines[i], 478, startY + i * lineHeight)
+        ctx.fillText(lines[i], 0, startY + i * lineHeight)
       }
       ctx.restore()
     }
