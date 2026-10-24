@@ -59,6 +59,12 @@ const server = http.createServer(async (req, res) => {
       return res.end(buffer)
     }
 
+    if (url.pathname === '/api/iqs') {
+      const buffer = await zirekuCanvas.renderIQS(body)
+      res.writeHead(200, { 'Content-Type': 'image/png' })
+      return res.end(buffer)
+    }
+
     if (url.pathname === '/api/fakech') {
       const buffer = await zirekuCanvas.renderFakeCH(body)
       res.writeHead(200, { 'Content-Type': 'image/png' })

@@ -1,5 +1,6 @@
 import { registerFonts, queueRender, normalizeAvatar, formatRupiah, getAssetPath } from './common.js'
 import { renderIQC } from './iqc.js'
+import { renderIQS } from './iqs.js'
 import { renderFakeCH } from './fakechios.js'
 import { renderFakeGC } from './fakegcios.js'
 import { renderBikinQRIS } from './bikinqris.js'
@@ -13,6 +14,7 @@ registerFonts()
 
 export {
   renderIQC,
+  renderIQS,
   renderFakeCH,
   renderFakeGC,
   renderBikinQRIS,
@@ -30,6 +32,7 @@ export {
 
 export default {
   renderIQC,
+  renderIQS,
   renderFakeCH,
   renderFakeGC,
   renderBikinQRIS,
