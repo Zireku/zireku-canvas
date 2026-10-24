@@ -39,13 +39,16 @@ export function registerFonts() {
   ]
 
   for (const item of fontMappings) {
-    const fullPath = getAssetPath('font', item.file)
-    if (fs.existsSync(fullPath)) {
+    const candidatePaths = [
+      getAssetPath('font', item.file),
+      path.resolve(process.cwd(), 'media/font', item.file),
+      path.resolve('/root/gateway/media/font', item.file)
+    ]
+    const fullPath = candidatePaths.find(p => fs.existsSync(p))
+    if (fullPath) {
       try {
         GlobalFonts.registerFromPath(fullPath, item.name)
-      } catch (err) {
-
-      }
+      } catch (err) {}
     }
   }
 
