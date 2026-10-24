@@ -1,8 +1,9 @@
 import { createCanvas, loadImage, clearAllCache } from '@napi-rs/canvas'
-import { readFile } from 'node:fs/promises'
+import { readFile, stat } from 'node:fs/promises'
 import { registerFonts, queueRender, getAssetPath } from './common.js'
 
 let cachedTemplateBuffer = null
+let cachedTemplateMtime = 0
 
 async function getTemplateImage(customPath) {
   const filePath = customPath || getAssetPath('canvas', 'iqc', 'template.jpg')
@@ -10,8 +11,10 @@ async function getTemplateImage(customPath) {
     const buf = await readFile(filePath)
     return await loadImage(buf)
   }
-  if (!cachedTemplateBuffer) {
+  const st = await stat(filePath)
+  if (!cachedTemplateBuffer || cachedTemplateMtime !== st.mtimeMs) {
     cachedTemplateBuffer = await readFile(filePath)
+    cachedTemplateMtime = st.mtimeMs
   }
   return await loadImage(cachedTemplateBuffer)
 }
@@ -146,10 +149,11 @@ export async function renderIQC(options = {}) {
 
       ctx.drawImage(template, 0, 0, template.width, template.height)
 
-      const startX = 75
-      const maxW = 685
-      const maxH = 150
-      const startY = 890
+      const bubbleX = 42
+      const maxBubbleW = 742
+      const targetAreaY = 875
+      const maxAvailableH = 180
+      const maxInnerW = maxBubbleW - 54
 
       let fontSize = 44.5
       let timeFontSize = 30
@@ -161,38 +165,60 @@ export async function renderIQC(options = {}) {
         lineHeight = Math.round(fontSize * 1.22)
         timeFontSize = Math.max(20, Math.round(fontSize * 0.68))
         timeHeight = Math.round(timeFontSize * 1.15)
-        lines = wrapText(ctx, text, maxW, fontSize)
+        lines = wrapText(ctx, text, maxInnerW, fontSize)
 
         ctx.font = `${timeFontSize}px "SF Pro Text Regular", sans-serif`
-        const timeWidth = ctx.measureText(finalTime).width + 20
+        const timeWidth = ctx.measureText(finalTime).width + 24
         const lastLine = lines[lines.length - 1]
-        const canInlineTime = lines.length === 1 && (lastLine ? (lastLine.width + timeWidth <= maxW) : true)
+        const canInlineTime = lines.length === 1 && (lastLine ? (lastLine.width + timeWidth <= maxInnerW) : true)
 
-        const totalH = canInlineTime
+        const contentH = canInlineTime
           ? lines.length * lineHeight
           : lines.length * lineHeight + timeHeight
 
-        if (totalH <= maxH) {
+        if (contentH + 34 <= maxAvailableH) {
           break
         }
-        fontSize -= 2
+        fontSize -= 1.5
       }
 
       ctx.font = `${timeFontSize}px "SF Pro Text Regular", sans-serif`
       const timeWidth = ctx.measureText(finalTime).width
       const lastLine = lines[lines.length - 1]
-      const canInlineTime = lines.length === 1 && (lastLine ? (lastLine.width + timeWidth + 25 <= maxW) : true)
+      const canInlineTime = lines.length === 1 && (lastLine ? (lastLine.width + timeWidth + 24 <= maxInnerW) : true)
 
-      const totalH = canInlineTime
+      let bubbleW = 0
+      if (canInlineTime && lastLine) {
+        bubbleW = Math.max(220, Math.min(maxBubbleW, Math.round(lastLine.width + timeWidth + 60)))
+      } else {
+        let maxLineW = 0
+        for (const l of lines) {
+          if (l.width > maxLineW) maxLineW = l.width
+        }
+        bubbleW = Math.max(240, Math.min(maxBubbleW, Math.round(Math.max(maxLineW + 54, timeWidth + 60))))
+      }
+
+      const innerH = canInlineTime
         ? lines.length * lineHeight
         : lines.length * lineHeight + timeHeight
+      const bubbleH = innerH + 32
 
-      const offsetY = startY + Math.max(0, Math.floor((maxH - totalH) / 2))
+      const bubbleY = targetAreaY + Math.max(0, Math.floor((maxAvailableH - bubbleH) / 2))
 
-      let curY = offsetY
+      ctx.beginPath()
+      ctx.roundRect(bubbleX, bubbleY, bubbleW, bubbleH, 34)
+      const grad = ctx.createLinearGradient(0, bubbleY, 0, bubbleY + bubbleH)
+      grad.addColorStop(0, '#2b2d2c')
+      grad.addColorStop(1, '#252726')
+      ctx.fillStyle = grad
+      ctx.fill()
+
+      const textStartX = bubbleX + 27
+      let curY = bubbleY + 16
+
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i]
-        let curX = startX
+        let curX = textStartX
         const baseline = curY + Math.round(fontSize * 0.88)
 
         for (const span of line.spans) {
@@ -216,15 +242,14 @@ export async function renderIQC(options = {}) {
       }
 
       ctx.font = `${timeFontSize}px "SF Pro Text Regular", sans-serif`
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.55)'
       ctx.textBaseline = 'alphabetic'
 
-      if (canInlineTime && lastLine) {
-        const timeX = Math.max(startX + lastLine.width + 20, 715 - timeWidth)
-        const timeBaseline = offsetY + Math.round(fontSize * 0.88)
+      const timeX = bubbleX + bubbleW - 24 - timeWidth
+      if (canInlineTime) {
+        const timeBaseline = bubbleY + 16 + Math.round(fontSize * 0.88)
         ctx.fillText(finalTime, timeX, timeBaseline)
       } else {
-        const timeX = 715 - timeWidth
         const timeBaseline = curY + Math.round(timeFontSize * 0.82)
         ctx.fillText(finalTime, timeX, timeBaseline)
       }
