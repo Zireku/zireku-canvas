@@ -28,17 +28,19 @@ Dapat digunakan dengan 3 cara:
 
 ### Fitur & Modul Canvas
 
-<details>
-<summary><b>Klik untuk Membuka Tabel Daftar Fitur & Modul Canvas (8 Modul)</b></summary>
+<details open>
+<summary><b>Tabel Daftar Fitur & Modul Canvas (10 Modul)</b></summary>
 <br>
 
 | Modul | Fungsi API | Deskripsi & Fitur Utama | Format Output | Hasil Render |
 | :--- | :--- | :--- | :--- | :---: |
-| **Fake Chat Quote iOS** | `renderIQC(options)` | Quote chat WhatsApp iOS presisi, dynamic bubble height, auto word-wrap, dan timestamp collision-free. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqc.jpg) |
+| **Fake Chat iOS (IQC)** | `renderIQC(options)` | WhatsApp iOS incoming message bubble interaktif, dynamic bubble sizing/hugging, natural dark wallpaper, auto font scaling, collision-free timestamp. | PNG (1080x2338) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqc.jpg) |
+| **Fake Quote Status iOS (IQS)** | `renderIQS(options)` | Quote chat balasan status WhatsApp iOS, dual-text (*quote* & *message*), dynamic downward expansion, timestamp presisi. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqs.jpg) |
+| **Club Quotes Mockup** | `renderClubQuotes(options)` | Mockup papan kutipan club/lounge estetik dengan 2 pilihan background (Billboard Neon & Entrance Bar). | JPEG (1080x1350) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-clubquotes.jpg) |
 | **Fake Channel iOS** | `renderFakeCH(options)` | Tampilan info WhatsApp Channel lengkap dengan foto profil bulat, jumlah pengikut terformat, dan kartu deskripsi adaptif. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-fakech.jpg) |
 | **Fake Group iOS** | `renderFakeGC(options)` | Tampilan info WhatsApp Group dengan dukungan judul multiline, deskripsi dinamis, dan downward push. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-fakegc.jpg) |
 | **Fake TikTok Video** | `renderFakeTTVT(options)` | Mockup UI TikTok realistis: avatar plus button, icon sidebar, like/comment/share counter, dan audio credit. | PNG (720x1600) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-fakettvt.jpg) |
-| **QRIS Generator** | `renderBikinQRIS(options)` | Generator kartu pembayaran QRIS estetik dengan 4 pilihan template (Dark Modern, Anime Monokrom, Pink Notepad, March 7th). | PNG (1080x1350 / 736x736) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikinqris.jpg) |
+| **QRIS Generator** | `renderBikinQRIS(options)` | Generator kartu pembayaran QRIS estetik dengan 5 pilihan template (Dark Modern, Anime Monokrom, Pink Notepad, March 7th, Compact WhatsApp). | PNG (1080x1350 / 736x736) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikinqris.jpg) |
 | **Stok Akun 16:9** | `renderBikinStokAkun(options)` | Showcase akun game/sosmed 16:9, judul store 3D extrusion, kontak WA/IG, dan pill harga terformat otomatis. | JPEG (896x1200) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikinstokakun.jpg) |
 | **Testimoni Transaksi** | `renderBikinTesti(options)` | Mockup 2 layar smartphone (Dark Tech & Clean Dual Phone) untuk memajang bukti transfer dan chat pelanggan. | PNG (1080x1350) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-bikintesti.jpg) |
 | **Setup Gaming 3D** | `renderSetupGaming(options)` | Proyeksi gambar monitor gaming 3D trapezoid dengan koreksi perspektif non-linear dan efek pencahayaan ambient. | JPEG (1080x1920) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-setupgaming.jpg) |
@@ -46,13 +48,22 @@ Dapat digunakan dengan 3 cara:
 </details>
 
 <details>
-<summary><b>Klik untuk Membuka Galeri Visual Semua Hasil Render</b></summary>
+<summary><b>Galeri Visual Hasil Render</b></summary>
 <br>
 
 <div align="center">
 
-#### Fake Chat Quote iOS
-<img src="docs/previews/preview-iqc.jpg" alt="Preview Fake Chat Quote iOS" width="450" />
+#### Fake Chat iOS Single Bubble (IQC) & Fake Quote Status iOS (IQS)
+<p align="center">
+  <img src="docs/previews/preview-iqc.jpg" alt="Preview Fake Chat iOS (IQC)" width="420" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/previews/preview-iqs.jpg" alt="Preview Fake Quote Status iOS (IQS)" width="420" />
+</p>
+
+<br>
+
+#### Club Quotes Mockup
+<img src="docs/previews/preview-clubquotes.jpg" alt="Preview Club Quotes" width="450" />
 
 <br><br>
 
@@ -119,8 +130,8 @@ Script otomatis ini akan mengunduh font langsung dari aset GitHub Releases resmi
 > [!TIP]
 > Klik judul modul di bawah ini untuk membuka dan melihat contoh kode implementasi.
 
-<details>
-<summary><b>1. Fake WhatsApp iOS Quote (<code>renderIQC</code>)</b></summary>
+<details open>
+<summary><b>1. Fake WhatsApp iOS Single Bubble (<code>renderIQC</code>)</b></summary>
 <br>
 
 ```javascript
@@ -128,9 +139,8 @@ import { renderIQC } from 'zireku-canvas'
 import fs from 'node:fs'
 
 const buffer = await renderIQC({
-  quote: 'Bro, project canvas kita udah selesai?',
-  message: 'Udah dong! Support *bold*, _italic_, ~strike~, dan otomatis turun ke bawah tanpa tembus bubble.',
-  time: '14.20'
+  text: 'Tdi ktanya gopay nya gabisa di tf',
+  time: '06.33'
 })
 
 fs.writeFileSync('output-iqc.png', buffer)
@@ -139,7 +149,44 @@ fs.writeFileSync('output-iqc.png', buffer)
 </details>
 
 <details>
-<summary><b>2. Fake Channel Info iOS (<code>renderFakeCH</code>)</b></summary>
+<summary><b>2. Fake WhatsApp iOS Quote Status (<code>renderIQS</code>)</b></summary>
+<br>
+
+```javascript
+import { renderIQS } from 'zireku-canvas'
+import fs from 'node:fs'
+
+const buffer = await renderIQS({
+  quote: 'PGN BGET KAGURA LGEND ANYING',
+  message: 'yuk beli Kaka bantuin ya',
+  time: '09.07'
+})
+
+fs.writeFileSync('output-iqs.png', buffer)
+```
+
+</details>
+
+<details>
+<summary><b>3. Club Quotes Mockup (<code>renderClubQuotes</code>)</b></summary>
+<br>
+
+```javascript
+import { renderClubQuotes } from 'zireku-canvas'
+import fs from 'node:fs'
+
+const buffer = await renderClubQuotes({
+  text: 'Antara cinta dan logika, aku memilih bahagia.',
+  template: 1
+})
+
+fs.writeFileSync('output-clubquotes.jpg', buffer)
+```
+
+</details>
+
+<details>
+<summary><b>4. Fake Channel Info iOS (<code>renderFakeCH</code>)</b></summary>
 <br>
 
 ```javascript
@@ -159,7 +206,7 @@ fs.writeFileSync('output-channel.png', buffer)
 </details>
 
 <details>
-<summary><b>3. Fake Group Info iOS (<code>renderFakeGC</code>)</b></summary>
+<summary><b>5. Fake Group Info iOS (<code>renderFakeGC</code>)</b></summary>
 <br>
 
 ```javascript
@@ -179,7 +226,7 @@ fs.writeFileSync('output-group.png', buffer)
 </details>
 
 <details>
-<summary><b>4. Fake TikTok Video Mockup (<code>renderFakeTTVT</code>)</b></summary>
+<summary><b>6. Fake TikTok Video Mockup (<code>renderFakeTTVT</code>)</b></summary>
 <br>
 
 ```javascript
@@ -202,7 +249,7 @@ fs.writeFileSync('output-fakettvt.png', buffer)
 </details>
 
 <details>
-<summary><b>5. Generator QRIS Custom (<code>renderBikinQRIS</code>)</b></summary>
+<summary><b>7. Generator QRIS Custom (<code>renderBikinQRIS</code>)</b></summary>
 <br>
 
 ```javascript
@@ -222,7 +269,7 @@ fs.writeFileSync('output-qris.png', buffer)
 </details>
 
 <details>
-<summary><b>6. Showcase Stok Akun (<code>renderBikinStokAkun</code>)</b></summary>
+<summary><b>8. Showcase Stok Akun (<code>renderBikinStokAkun</code>)</b></summary>
 <br>
 
 ```javascript
@@ -243,7 +290,7 @@ fs.writeFileSync('output-stok.jpg', buffer)
 </details>
 
 <details>
-<summary><b>7. Mockup Testimoni (<code>renderBikinTesti</code>)</b></summary>
+<summary><b>9. Mockup Testimoni (<code>renderBikinTesti</code>)</b></summary>
 <br>
 
 ```javascript
@@ -264,7 +311,7 @@ fs.writeFileSync('output-testi.png', buffer)
 </details>
 
 <details>
-<summary><b>8. Showcase Setup Gaming 3D (<code>renderSetupGaming</code>)</b></summary>
+<summary><b>10. Showcase Setup Gaming 3D (<code>renderSetupGaming</code>)</b></summary>
 <br>
 
 ```javascript
@@ -290,15 +337,28 @@ npm start
 Server REST API aktif di `http://localhost:3000`.
 
 #### Contoh Panggilan HTTP (cURL)
+
+**1. Fake Chat iOS (IQC)**
 ```bash
 curl -X POST http://localhost:3000/api/iqc \
   -H "Content-Type: application/json" \
   -d '{
-    "quote": "Halo",
+    "text": "Tdi ktanya gopay nya gabisa di tf",
+    "time": "06.33"
+  }' \
+  --output hasil-iqc.png
+```
+
+**2. Fake Quote Status iOS (IQS)**
+```bash
+curl -X POST http://localhost:3000/api/iqs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "quote": "Halo bro",
     "message": "Pesan dari REST API *berhasil* dibuat!",
     "time": "10.00"
   }' \
-  --output hasil-quote.png
+  --output hasil-iqs.png
 ```
 
 ### Lisensi
