@@ -1,8 +1,9 @@
 import { createCanvas, loadImage, clearAllCache } from '@napi-rs/canvas'
-import { readFile } from 'node:fs/promises'
+import { readFile, stat } from 'node:fs/promises'
 import { registerFonts, queueRender, getAssetPath } from './common.js'
 
 let cachedTemplateBuffer = null
+let cachedTemplateMtime = 0
 
 async function getTemplateImage(customPath) {
   let filePath = customPath || getAssetPath('canvas', 'iqs', 'template.jpg')
@@ -10,13 +11,10 @@ async function getTemplateImage(customPath) {
     const buf = await readFile(filePath)
     return await loadImage(buf)
   }
-  if (!cachedTemplateBuffer) {
-    try {
-      cachedTemplateBuffer = await readFile(filePath)
-    } catch {
-      filePath = getAssetPath('canvas', 'iqc', 'template.jpg')
-      cachedTemplateBuffer = await readFile(filePath)
-    }
+  const st = await stat(filePath)
+  if (!cachedTemplateBuffer || cachedTemplateMtime !== st.mtimeMs) {
+    cachedTemplateBuffer = await readFile(filePath)
+    cachedTemplateMtime = st.mtimeMs
   }
   return await loadImage(cachedTemplateBuffer)
 }
@@ -104,22 +102,36 @@ function layoutMessage(ctx, text, maxWidth, fontSize = 17.5) {
             currentLine.push({ text: token, width: tokenWidth, style: span, isSpace: false })
             currentLineWidth += tokenWidth
           } else {
-            if (tokenWidth > maxWidth) {
+            if (currentLine.length > 0) {
+              while (currentLine.length > 0 && currentLine[currentLine.length - 1].isSpace) {
+                currentLineWidth -= currentLine.pop().width
+              }
+              lines.push({ tokens: currentLine, width: currentLineWidth })
+              currentLine = []
+              currentLineWidth = 0
+            }
+            if (tokenWidth <= maxWidth) {
+              currentLine.push({ text: token, width: tokenWidth, style: span, isSpace: false })
+              currentLineWidth += tokenWidth
+            } else {
+              let charBuf = ''
               for (const ch of token) {
-                const chWidth = ctx.measureText(ch).width
-                if (currentLineWidth + chWidth <= maxWidth) {
-                  currentLine.push({ text: ch, width: chWidth, style: span, isSpace: false })
-                  currentLineWidth += chWidth
+                const chWidth = ctx.measureText(charBuf + ch).width
+                if (chWidth <= maxWidth) {
+                  charBuf += ch
                 } else {
-                  if (currentLine.length > 0) lines.push({ tokens: currentLine, width: currentLineWidth })
-                  currentLine = [{ text: ch, width: chWidth, style: span, isSpace: false }]
-                  currentLineWidth = chWidth
+                  if (charBuf) {
+                    const w = ctx.measureText(charBuf).width
+                    lines.push({ tokens: [{ text: charBuf, width: w, style: span, isSpace: false }], width: w })
+                  }
+                  charBuf = ch
                 }
               }
-            } else {
-              if (currentLine.length > 0) lines.push({ tokens: currentLine, width: currentLineWidth })
-              currentLine = [{ text: token, width: tokenWidth, style: span, isSpace: false }]
-              currentLineWidth = tokenWidth
+              if (charBuf) {
+                const w = ctx.measureText(charBuf).width
+                currentLine.push({ text: charBuf, width: w, style: span, isSpace: false })
+                currentLineWidth = w
+              }
             }
           }
         }
@@ -150,87 +162,84 @@ export async function renderIQS(options = {}) {
     throw new Error('Parameter "quote" dan "message" wajib diisi.')
   }
 
-  const finalTime = time && time.trim() ? time.trim().replace(':', '.') : getCurrentTime()
+  const finalTime = time ? time.trim().replace(':', '.') : getCurrentTime()
 
-  return queueRender(async () => {
+  return await queueRender(async () => {
     try {
-      const template = await getTemplateImage(templatePath)
-      const canvas = createCanvas(template.width, template.height)
+      const templateImg = await getTemplateImage(templatePath)
+      const canvas = createCanvas(591, 1280)
       const ctx = canvas.getContext('2d')
 
-      ctx.drawImage(template, 0, 0, template.width, template.height)
+      const maxTextWidth = 352
+      const fontSize = 17.5
+      const lineHeight = 23
 
-      const quoteX = 184
-      const quoteY = 638
-      const quoteMaxWidth = 232
+      const lines = layoutMessage(ctx, message, maxTextWidth, fontSize)
 
-      ctx.font = '15.5px "SF Pro Text Regular", "Apple Color Emoji", "Noto Color Emoji", sans-serif'
-      ctx.fillStyle = '#8e8e93'
-      ctx.textBaseline = 'alphabetic'
+      ctx.font = '13.5px "SF Pro Text Regular", sans-serif'
+      const timeWidth = ctx.measureText(finalTime).width
+      const timeGap = 8
 
-      let quoteDisplay = quote
-      if (ctx.measureText(quoteDisplay).width > quoteMaxWidth) {
-        while (quoteDisplay.length > 0 && ctx.measureText(quoteDisplay + '...').width > quoteMaxWidth) {
-          quoteDisplay = quoteDisplay.slice(0, -1)
-        }
-        quoteDisplay += '...'
-      }
-      ctx.fillText(quoteDisplay, quoteX, quoteY)
+      const isSingleLine = lines.length <= 1
+      const lastLine = lines.length > 0 ? lines[lines.length - 1] : { width: 0 }
+      const timeFitsOnLastLine = (lastLine.width + timeGap + timeWidth) <= maxTextWidth
 
-      const textStartX = 175
-      const textMaxWidth = 240
-      const maxLines = 4
+      const textStartY = isSingleLine && timeFitsOnLastLine ? 575 : 569
+      const numLines = Math.max(1, lines.length)
+      const lastLineY = textStartY + (numLines - 1) * lineHeight
 
-      let fontSize = 17.5
-      let lineHeight = 21.5
-      let layout = layoutMessage(ctx, message, textMaxWidth, fontSize)
-
-      if (layout.length > maxLines) {
-        fontSize = 15.5
-        lineHeight = 19.5
-        layout = layoutMessage(ctx, message, textMaxWidth, fontSize)
-      }
-      if (layout.length > maxLines) {
-        fontSize = 14
-        lineHeight = 17.5
-        layout = layoutMessage(ctx, message, textMaxWidth, fontSize)
-      }
-
-      if (layout.length > maxLines) {
-        layout = layout.slice(0, maxLines)
-        const lastLine = layout[maxLines - 1]
-        let currentTokens = lastLine.tokens
-        let lineStr = currentTokens.map(t => t.text).join('')
-        ctx.font = getFontString(fontSize, { bold: false, italic: false })
-        while (lineStr.length > 0 && ctx.measureText(lineStr + '...').width > textMaxWidth) {
-          lineStr = lineStr.slice(0, -1)
-        }
-        layout[maxLines - 1] = {
-          tokens: [{ text: lineStr + '...', width: ctx.measureText(lineStr + '...').width, style: {} }],
-          width: ctx.measureText(lineStr + '...').width
-        }
-      }
-
-      const count = layout.length
-      let startY
       let timeY
-      if (count === 1) {
-        startY = 673
-        timeY = 673
-      } else if (count === 2) {
-        startY = 665
-        timeY = 687
-      } else if (count === 3) {
-        startY = 660
-        timeY = 696
+      let contentBottom
+      if (timeFitsOnLastLine) {
+        timeY = lastLineY + 1
+        contentBottom = lastLineY + 8
       } else {
-        startY = 654
-        timeY = 702
+        timeY = lastLineY + 18
+        contentBottom = timeY + 6
       }
 
-      for (let i = 0; i < layout.length; i++) {
-        const line = layout[i]
-        const y = startY + (i * lineHeight)
+      const defaultBubbleBottom = 601
+      const requiredBottom = contentBottom + 9
+      const rawExtraHeight = Math.max(0, Math.ceil(requiredBottom - defaultBubbleBottom))
+      const extraHeight = Math.min(220, rawExtraHeight)
+
+      ctx.drawImage(templateImg, 0, 0, 591, 580, 0, 0, 591, 580)
+
+      if (extraHeight > 0) {
+        ctx.drawImage(templateImg, 0, 579, 591, 1, 0, 579, 591, extraHeight + 2)
+      }
+
+      const bottomH = 1280 - 580
+      ctx.drawImage(templateImg, 0, 580, 591, bottomH, 0, 580 + extraHeight, 591, bottomH)
+
+      const statusTime = finalTime
+      ctx.fillStyle = 'rgb(30, 30, 30)'
+      ctx.fillRect(40, 22, 68, 26)
+
+      ctx.font = '22px "SF Pro Display Semibold", "SF Pro Display Bold", sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillStyle = '#ffffff'
+      ctx.fillText(statusTime, 73, 43)
+
+      ctx.font = '18px "SF Pro Text Regular", "Apple Color Emoji", "Noto Color Emoji", sans-serif'
+      ctx.textAlign = 'left'
+      ctx.fillStyle = '#9ca0a6'
+
+      const maxQuoteWidth = 312
+      let qText = quote.replace(/[*_~`]/g, '')
+      if (ctx.measureText(qText).width > maxQuoteWidth) {
+        while (ctx.measureText(qText + '...').width > maxQuoteWidth && qText.length > 0) {
+          qText = qText.slice(0, -1).trim()
+        }
+        qText += '...'
+      }
+      ctx.fillText(qText, 76, 524)
+
+      const textStartX = 40
+      ctx.textAlign = 'left'
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]
+        const y = textStartY + i * lineHeight
         let curX = textStartX
         for (const tok of line.tokens) {
           ctx.font = getFontString(fontSize, tok.style)
