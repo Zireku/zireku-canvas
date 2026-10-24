@@ -29,11 +29,12 @@ Dapat digunakan dengan 3 cara:
 ### Fitur & Modul Canvas
 
 <details open>
-<summary><b>Tabel Daftar Fitur & Modul Canvas (10 Modul)</b></summary>
+<summary><b>Tabel Daftar Fitur & Modul Canvas (11 Modul)</b></summary>
 <br>
 
 | Modul | Fungsi API | Deskripsi & Fitur Utama | Format Output | Hasil Render |
 | :--- | :--- | :--- | :--- | :---: |
+| **Fake Contact iOS (IQontact)** | `renderIQontact(options)` | Tampilan Info Kontak WhatsApp iOS lengkap: foto profil bulat, nama kontak auto-shrink, nomor telepon terformat, jam dinamis, dan tombol aksi suara/video/cari. | PNG (1080x2338) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqontact.jpg) |
 | **Fake Chat iOS (IQC)** | `renderIQC(options)` | WhatsApp iOS incoming message bubble interaktif, dynamic bubble sizing/hugging, natural dark wallpaper, auto font scaling, collision-free timestamp. | PNG (1080x2338) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqc.jpg) |
 | **Fake Quote Status iOS (IQS)** | `renderIQS(options)` | Quote chat balasan status WhatsApp iOS, dual-text (*quote* & *message*), dynamic downward expansion, timestamp presisi. | PNG (591x1280) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-iqs.jpg) |
 | **Club Quotes Mockup** | `renderClubQuotes(options)` | Mockup papan kutipan club/lounge estetik dengan 2 pilihan background (Billboard Neon & Entrance Bar). | JPEG (1080x1350) | [![Lihat Hasil](https://img.shields.io/badge/Preview-Lihat_Hasil-0969DA?style=flat-square)](docs/previews/preview-clubquotes.jpg) |
@@ -52,6 +53,11 @@ Dapat digunakan dengan 3 cara:
 <br>
 
 <div align="center">
+
+#### Fake Contact iOS (IQontact)
+<img src="docs/previews/preview-iqontact.jpg" alt="Preview Fake Contact iOS (IQontact)" width="420" />
+
+<br><br>
 
 #### Fake Chat iOS Single Bubble (IQC) & Fake Quote Status iOS (IQS)
 <p align="center">
@@ -131,7 +137,26 @@ Script otomatis ini akan mengunduh font langsung dari aset GitHub Releases resmi
 > Klik judul modul di bawah ini untuk membuka dan melihat contoh kode implementasi.
 
 <details open>
-<summary><b>1. Fake WhatsApp iOS Single Bubble (<code>renderIQC</code>)</b></summary>
+<summary><b>1. Fake WhatsApp iOS Contact Info (<code>renderIQontact</code>)</b></summary>
+<br>
+
+```javascript
+import { renderIQontact } from 'zireku-canvas'
+import fs from 'node:fs'
+
+const buffer = await renderIQontact({
+  name: 'Dimas',
+  number: '+62 858-7887-4152',
+  time: '21.21'
+})
+
+fs.writeFileSync('output-iqontact.png', buffer)
+```
+
+</details>
+
+<details>
+<summary><b>2. Fake WhatsApp iOS Single Bubble (<code>renderIQC</code>)</b></summary>
 <br>
 
 ```javascript
@@ -149,7 +174,7 @@ fs.writeFileSync('output-iqc.png', buffer)
 </details>
 
 <details>
-<summary><b>2. Fake WhatsApp iOS Quote Status (<code>renderIQS</code>)</b></summary>
+<summary><b>3. Fake WhatsApp iOS Quote Status (<code>renderIQS</code>)</b></summary>
 <br>
 
 ```javascript
@@ -168,7 +193,7 @@ fs.writeFileSync('output-iqs.png', buffer)
 </details>
 
 <details>
-<summary><b>3. Club Quotes Mockup (<code>renderClubQuotes</code>)</b></summary>
+<summary><b>4. Club Quotes Mockup (<code>renderClubQuotes</code>)</b></summary>
 <br>
 
 ```javascript
@@ -186,7 +211,7 @@ fs.writeFileSync('output-clubquotes.jpg', buffer)
 </details>
 
 <details>
-<summary><b>4. Fake Channel Info iOS (<code>renderFakeCH</code>)</b></summary>
+<summary><b>5. Fake Channel Info iOS (<code>renderFakeCH</code>)</b></summary>
 <br>
 
 ```javascript
@@ -206,7 +231,7 @@ fs.writeFileSync('output-channel.png', buffer)
 </details>
 
 <details>
-<summary><b>5. Fake Group Info iOS (<code>renderFakeGC</code>)</b></summary>
+<summary><b>6. Fake Group Info iOS (<code>renderFakeGC</code>)</b></summary>
 <br>
 
 ```javascript
@@ -226,7 +251,7 @@ fs.writeFileSync('output-group.png', buffer)
 </details>
 
 <details>
-<summary><b>6. Fake TikTok Video Mockup (<code>renderFakeTTVT</code>)</b></summary>
+<summary><b>7. Fake TikTok Video Mockup (<code>renderFakeTTVT</code>)</b></summary>
 <br>
 
 ```javascript
@@ -249,7 +274,7 @@ fs.writeFileSync('output-fakettvt.png', buffer)
 </details>
 
 <details>
-<summary><b>7. Generator QRIS Custom (<code>renderBikinQRIS</code>)</b></summary>
+<summary><b>8. Generator QRIS Custom (<code>renderBikinQRIS</code>)</b></summary>
 <br>
 
 ```javascript
@@ -269,7 +294,7 @@ fs.writeFileSync('output-qris.png', buffer)
 </details>
 
 <details>
-<summary><b>8. Showcase Stok Akun (<code>renderBikinStokAkun</code>)</b></summary>
+<summary><b>9. Showcase Stok Akun (<code>renderBikinStokAkun</code>)</b></summary>
 <br>
 
 ```javascript
@@ -290,7 +315,7 @@ fs.writeFileSync('output-stok.jpg', buffer)
 </details>
 
 <details>
-<summary><b>9. Mockup Testimoni (<code>renderBikinTesti</code>)</b></summary>
+<summary><b>10. Mockup Testimoni (<code>renderBikinTesti</code>)</b></summary>
 <br>
 
 ```javascript
@@ -311,7 +336,7 @@ fs.writeFileSync('output-testi.png', buffer)
 </details>
 
 <details>
-<summary><b>10. Showcase Setup Gaming 3D (<code>renderSetupGaming</code>)</b></summary>
+<summary><b>11. Showcase Setup Gaming 3D (<code>renderSetupGaming</code>)</b></summary>
 <br>
 
 ```javascript
@@ -338,7 +363,19 @@ Server REST API aktif di `http://localhost:3000`.
 
 #### Contoh Panggilan HTTP (cURL)
 
-**1. Fake Chat iOS (IQC)**
+**1. Fake Contact iOS (IQontact)**
+```bash
+curl -X POST http://localhost:3000/api/iqontact \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Dimas",
+    "number": "+62 858-7887-4152",
+    "time": "21.21"
+  }' \
+  --output hasil-kontak.png
+```
+
+**2. Fake Chat iOS (IQC)**
 ```bash
 curl -X POST http://localhost:3000/api/iqc \
   -H "Content-Type: application/json" \
@@ -349,7 +386,7 @@ curl -X POST http://localhost:3000/api/iqc \
   --output hasil-iqc.png
 ```
 
-**2. Fake Quote Status iOS (IQS)**
+**3. Fake Quote Status iOS (IQS)**
 ```bash
 curl -X POST http://localhost:3000/api/iqs \
   -H "Content-Type: application/json" \

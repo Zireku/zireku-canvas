@@ -65,6 +65,18 @@ const server = http.createServer(async (req, res) => {
       return res.end(buffer)
     }
 
+    if (url.pathname === '/api/iqontact') {
+      const buffer = await zirekuCanvas.renderIQontact(body)
+      res.writeHead(200, { 'Content-Type': 'image/png' })
+      return res.end(buffer)
+    }
+
+    if (url.pathname === '/api/clubquotes') {
+      const buffer = await zirekuCanvas.renderClubQuotes(body)
+      res.writeHead(200, { 'Content-Type': 'image/jpeg' })
+      return res.end(buffer)
+    }
+
     if (url.pathname === '/api/fakech') {
       const buffer = await zirekuCanvas.renderFakeCH(body)
       res.writeHead(200, { 'Content-Type': 'image/png' })
